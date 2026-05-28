@@ -1,7 +1,6 @@
 [build]
-  base    = "cardrush"
   command = "npm install && npm run build"
-  publish = "cardrush/dist"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
