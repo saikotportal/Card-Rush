@@ -1,12 +1,11 @@
 [build]
-  base    = "cardrush"
-  command = "npm install && npm run build"
-  publish = "cardrush/dist"
+  command = "npm ci --include=dev && npm run build"
+  publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
 
 [[redirects]]
-  from   = "/*"
-  to     = "/index.html"
+  from = "/*"
+  to = "/index.html"
   status = 200
