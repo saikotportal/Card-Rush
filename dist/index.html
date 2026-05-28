@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07071a" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="CardRush" />
+    <link rel="manifest" href="/assets/manifest-BxZpAc5w.json" />
+    <meta name="description" content="Card Rush – Fast-paced UNO-style card game" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/icon-16.png" />
+
+    <!-- Apple touch icon (home screen icon on iOS) -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/icon-180.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+    <title>Card Rush</title>
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html, body { width: 100%; background: #07071a; }
+      #root { width: 100%; }
+    </style>
+    <script type="module" crossorigin src="/assets/index-f8UEvD5Z.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-B3mv261l.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- Capture beforeinstallprompt BEFORE React mounts -->
+    <script>
+      window.__pwaInstallPrompt = null;
+      window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        window.__pwaInstallPrompt = e;
+      }, { once: false });
+    </script>
+  </body>
+</html>
