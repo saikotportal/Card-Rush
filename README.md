@@ -35,7 +35,7 @@
 ## 🚀 Getting Started
 
 ### Play instantly
-Visit the live site (no install needed): **[your-netlify-url.netlify.app](#)**
+Visit the live site (no install needed): **[[[your-netlify-url.netlify.app](#](https://cardrushh.netlify.app)](https://cardrushh.netlify.app/))**
 
 ### Install as an app (PWA)
 - **Android/Chrome:** tap the browser menu → *Add to Home Screen*
