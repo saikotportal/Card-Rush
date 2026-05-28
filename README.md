@@ -86,30 +86,6 @@ Zero runtime dependencies beyond React.
 
 ---
 
-## 🌐 Deployment (Netlify)
-
-The repo includes a `netlify.toml` — everything is pre-configured.
-
-### Option 1 — Git deploy (auto-redeploy on push)
-1. Push this repo to GitHub
-2. Go to [app.netlify.com](https://app.netlify.com) → **Add new site → Import from Git**
-3. Select your repo — Netlify auto-detects the build settings
-4. Click **Deploy** ✅
-
-### Option 2 — Drag & drop
-```bash
-npm run build
-```
-Drag the `dist/` folder onto [app.netlify.com](https://app.netlify.com/drop).
-
-### Option 3 — Netlify CLI
-```bash
-npm install -g netlify-cli
-npm run build
-netlify deploy --prod --dir=dist
-```
-
----
 
 ## 📁 Project Structure
 
