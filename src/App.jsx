@@ -1,4 +1,5 @@
 import React from "react";
+import "./styles.css";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 // ─── CONSTANTS ────────────────────────────────────────────────────────────────
@@ -64,7 +65,7 @@ function dealGame(numAI) {
   let deck = buildDeck();
   const player = deck.splice(0,7);
   const aiHands = {};
-  for(let i=0;i<numAI;i++) aiHands[`ai${i}`] = deck.splice(0,7);
+  for(let i=0;i<numAI;i++) aiHands["ai"+i] = deck.splice(0,7);
   let top;
   do { top = deck.splice(0,1)[0]; } while(top.color==="wild");
   return { player, aiHands, deck, top };
@@ -103,7 +104,7 @@ function Card({ card, faceDown=false, small=false, selected=false, playable=fals
   const isSmallCard = W < 50;
   const fs = isSmallCard ? Math.max(6, Math.round(W*0.14)) : 12;
   const fsb = isSmallCard ? Math.max(10, Math.round(W*0.28)) : 24;
-  let transform = rotate ? `rotate(${rotate}deg)` : "";
+  let transform = rotate ? "rotate("+rotate+"deg)" : "";
   if(selected) transform += " translateY(-18px) scale(1.1)";
   else if(playable) transform += " translateY(-5px)";
   return (
@@ -111,11 +112,11 @@ function Card({ card, faceDown=false, small=false, selected=false, playable=fals
       width:W,height:H,borderRadius:R,flexShrink:0,userSelect:"none",
       background: faceDown
         ? "linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#1a1a3e 100%)"
-        : `linear-gradient(145deg,${th.bg},${th.dark})`,
-      border: selected?"3px solid #fff":playable?`2px solid ${th.glow}`:"2px solid rgba(255,255,255,0.13)",
+        : "linear-gradient(145deg,"+th.bg+","+th.dark,
+      border: selected?"3px solid #fff":playable?"2px solid "+th.glow:"2px solid rgba(255,255,255,0.13)",
       boxShadow: selected
-        ? `0 0 28px ${th.glow},0 10px 30px rgba(0,0,0,0.7)`
-        : playable ? `0 0 14px ${th.glow}70,0 4px 16px rgba(0,0,0,0.5)`
+        ? "0 0 28px "+th.glow+",0 10px 30px rgba(0,0,0,0.7)"
+        : playable ? "0 0 14px "+th.glow+"70,0 4px 16px rgba(0,0,0,0.5)"
         : "0 4px 14px rgba(0,0,0,0.5)",
       cursor:onClick?"pointer":"default",
       display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",
@@ -124,7 +125,7 @@ function Card({ card, faceDown=false, small=false, selected=false, playable=fals
     }}>
       <div style={{position:"absolute",top:0,left:0,right:0,height:"45%",
         background:"linear-gradient(to bottom,rgba(255,255,255,0.18),transparent)",
-        borderRadius:`${R}px ${R}px 0 0`,pointerEvents:"none"}}/>
+        borderRadius:R+"px "+R+"px 0 0",pointerEvents:"none"}}/>
       {!faceDown&&<div style={{position:"absolute",width:"75%",height:"83%",
         border:"2px solid rgba(255,255,255,0.2)",borderRadius:"50%",transform:"rotate(-25deg)"}}/>}
       {!faceDown&&<>
@@ -137,7 +138,7 @@ function Card({ card, faceDown=false, small=false, selected=false, playable=fals
       </>}
       <span style={{fontSize:faceDown?fsb*1.3:fsb,fontWeight:900,zIndex:1,
         color:faceDown?"#c77dff":th.text,
-        textShadow:`0 0 20px ${faceDown?"#c77dff":th.glow}`,
+        textShadow:"0 0 20px "+(faceDown?"#c77dff":th.glow),
         fontFamily:"'Orbitron',monospace"}}>{faceDown?"?":label}</span>
     </div>
   );
@@ -160,8 +161,8 @@ function ColorPicker({ onPick }) {
           {COLORS.map(c=>(
             <div key={c} onClick={()=>onPick(c)} style={{
               width:60,height:60,borderRadius:14,cursor:"pointer",
-              background:`linear-gradient(135deg,${THEME[c].bg},${THEME[c].dark})`,
-              boxShadow:`0 0 20px ${THEME[c].glow}60`,
+              background:"linear-gradient(135deg,"+THEME[c].bg+","+THEME[c].dark+")",
+              boxShadow:"0 0 20px "+THEME[c].glow+"60",
               border:"2px solid rgba(255,255,255,0.2)",
               display:"flex",alignItems:"center",justifyContent:"center",
               fontSize:26,transition:"transform 0.15s",
@@ -185,7 +186,7 @@ function ThinkingDots() {
         <span key={i} style={{
           width:4,height:4,borderRadius:"50%",
           background:"#c77dff",display:"inline-block",
-          animation:`thinkingDot 1.2s ease-in-out ${i*0.2}s infinite`,
+          animation:"thinkingDot 1.2s ease-in-out "+(i*0.2)+"s infinite",
         }}/>
       ))}
     </span>
@@ -332,7 +333,7 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
   },[]);
   const playable=playerHand.filter(c=>canPlay(c,topState,currentColor));
 
-  const turnOrder=useCallback(()=>["player",...Array.from({length:numAI},(_,i)=>`ai${i}`)],[numAI]);
+  const turnOrder=useCallback(()=>["player",...Array.from({length:numAI},(_,i)=>"ai"+i)],[numAI]);
 
   const nextTurn=useCallback((from,skip=false)=>{
     const order=turnOrder();
@@ -490,27 +491,6 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
       background:"linear-gradient(160deg,#07071a 0%,#0f0c29 40%,#131030 100%)",
       display:"flex",flexDirection:"column",fontFamily:"'Orbitron',monospace",
       overflow:"hidden",position:"relative"}}>
-      <style>{`
-        @keyframes quipTop{0%{opacity:0;transform:scale(0.7) translateX(-50%)}15%{opacity:1;transform:scale(1) translateX(-50%)}85%{opacity:1;transform:scale(1) translateX(-50%)}100%{opacity:0;transform:scale(1) translateX(-50%)}}
-        @keyframes quipSide{0%{opacity:0;transform:scale(0.7)}15%{opacity:1;transform:scale(1)}85%{opacity:1}100%{opacity:0}}
-        @keyframes flyCard{0%{opacity:0;transform:scale(0.5) translateY(20px)}50%{opacity:1;transform:scale(1.1) translateY(-5px)}100%{opacity:0;transform:scale(0.8) translateY(-30px)}}
-        @keyframes drawB{0%{transform:scale(1)}40%{transform:scale(1.12)}100%{transform:scale(1)}}
-        @keyframes unoFlash{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.08)}}
-        @keyframes pulseGlow{0%,100%{box-shadow:0 0 24px ${colorGlow}55}50%{box-shadow:0 0 44px ${colorGlow}99}}
-        @keyframes rotateHint{0%,100%{transform:rotate(0deg)}30%{transform:rotate(-90deg)}70%{transform:rotate(-90deg)}}
-        @keyframes dealIn{0%{opacity:0;transform:translateY(120px) rotate(var(--dr,0deg)) scale(0.6)}60%{opacity:1;transform:translateY(-8px) rotate(var(--dr,0deg)) scale(1.04)}100%{opacity:1;transform:translateY(0) rotate(0deg) scale(1)}}
-        @keyframes slamRipple{0%{transform:scale(0.6);opacity:0.9}100%{transform:scale(3.2);opacity:0}}
-        @keyframes drawPanicShake{0%,100%{transform:translateX(0)}15%{transform:translateX(-7px) rotate(-2deg)}30%{transform:translateX(7px) rotate(2deg)}45%{transform:translateX(-5px)}60%{transform:translateX(5px)}75%{transform:translateX(-3px)}90%{transform:translateX(3px)}}
-        @keyframes colorBurstPart{0%{transform:translate(-50%,-50%) translate(0,0) scale(1);opacity:1}100%{transform:translate(-50%,-50%) translate(var(--bx),var(--by)) scale(0);opacity:0}}
-        @keyframes blazeTell{0%,100%{filter:drop-shadow(0 0 3px #e63946)}50%{filter:drop-shadow(0 0 14px #ff6b6b) brightness(1.3)}}
-        @keyframes chillTell{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-5px) rotate(3deg)}}
-        @keyframes trixTell{0%{transform:rotate(0deg)}25%{transform:rotate(-15deg)}75%{transform:rotate(15deg)}100%{transform:rotate(0deg)}}
-        @keyframes cardArrive{0%{opacity:0;transform:translateX(-60px) rotate(-18deg) scale(0.7)}70%{transform:translateX(3px) rotate(2deg) scale(1.06)}100%{opacity:1;transform:translateX(0) rotate(0deg) scale(1)}}
-        @keyframes aiTurnGlow{0%,100%{box-shadow:0 0 0px rgba(199,125,255,0),border-color:rgba(199,125,255,0.55)}50%{box-shadow:0 0 22px rgba(199,125,255,0.9),0 0 40px rgba(199,125,255,0.4);border-color:rgba(199,125,255,1)}}
-        @keyframes thinkingDot{0%,80%,100%{transform:scale(0);opacity:0.3}40%{transform:scale(1);opacity:1}}
-        @keyframes aiActivePop{0%{transform:scale(1)}50%{transform:scale(1.08)}100%{transform:scale(1)}}
-        @keyframes idleFade{0%,100%{opacity:0.45}50%{opacity:0.3}}
-      \`}</style>
 
       {/* AI panels at top — in portrait shows all AIs stacked, in landscape shows only the "top" one */}
       {topPanels.length>0&&(
@@ -533,13 +513,13 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
           justifyContent:"center",gap:isPortrait?6:10,position:"relative"}}>
           <div style={{fontSize:isPortrait?8:9,letterSpacing:3,textTransform:"uppercase",fontWeight:700,
             color:isMyTurn?"#43e97b":"rgba(199,125,255,0.7)"}}>
-            {isMyTurn?"⚡ YOUR TURN":`${aiPlayers[parseInt(currentTurn[2])]?.name||"AI"} thinking…`}
+            {isMyTurn ? "⚡ YOUR TURN" : (aiPlayers[parseInt(currentTurn[2])]?.name || "AI") + " thinking..."}
           </div>
           <div style={{display:"flex",alignItems:"center",gap:isPortrait?10:16}}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
               <div style={{width:isPortrait?16:22,height:isPortrait?16:22,borderRadius:"50%",
                 background:THEME[currentColor]?.bg||"#888",
-                boxShadow:`0 0 18px ${colorGlow}`,border:"2px solid rgba(255,255,255,0.3)"}}/>
+                boxShadow:"0 0 18px "+colorGlow,border:"2px solid rgba(255,255,255,0.3)"}}/>
               <div style={{fontSize:isPortrait?6:7,color:"rgba(255,255,255,0.3)",letterSpacing:1}}>
                 {currentColor.toUpperCase()}
               </div>
@@ -547,7 +527,7 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
             <div style={{position:"relative"}}>
               <div style={{width:isPortrait?54:70,height:isPortrait?76:98,borderRadius:isPortrait?8:11,
                 background:"rgba(255,255,255,0.04)",
-                border:`2px solid ${colorGlow}`,
+                border:"2px solid "+colorGlow,
                 animation:"pulseGlow 2s ease-in-out infinite",
                 display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <Card card={topState} overrideW={isPortrait?50:66} overrideH={isPortrait?70:94}/>
@@ -555,22 +535,22 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
               {/* slam ripple */}
               {slamRipple&&(
                 <div style={{position:"absolute",inset:0,borderRadius:11,
-                  border:`3px solid ${colorGlow}`,
+                  border:"3px solid "+colorGlow,
                   animation:"slamRipple 0.5s ease-out forwards",
                   pointerEvents:"none",zIndex:10}}/>
               )}
               {/* color burst particles */}
               {colorBurst&&[...Array(10)].map((_,i)=>{
                 const angle=(i/10)*360, dist=60+Math.random()*40;
-                const bx=`${Math.cos(angle*Math.PI/180)*dist}px`;
-                const by=`${Math.sin(angle*Math.PI/180)*dist}px`;
+                const bx=(Math.cos(angle*Math.PI/180)*dist)+"px";
+                const by=(Math.sin(angle*Math.PI/180)*dist)+"px";
                 return(
                   <div key={i} style={{
                     position:"absolute",top:"50%",left:"50%",
                     width:10,height:10,borderRadius:"50%",
                     background:THEME[colorBurst]?.glow||"#fff",
                     "--bx":bx,"--by":by,
-                    animation:`colorBurstPart 0.7s ease-out ${i*30}ms forwards`,
+                    animation:"colorBurstPart 0.7s ease-out "+(i*30)+"ms forwards",
                     pointerEvents:"none",zIndex:20,
                   }}/>
                 );
@@ -666,10 +646,10 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
             const lean=dealPhase?0:Math.max(-12,Math.min(12,diff*22));
             return(
               <div key={c.id} style={{
-                transform:dealPhase?undefined:`rotate(${lean}deg)`,
+                transform:dealPhase?undefined:"rotate("+lean+"deg)",
                 transition:"transform 0.15s ease",
-                "--dr":`${-8+(i%5)*4}deg`,
-                animation:dealPhase?`dealIn 0.5s cubic-bezier(.34,1.4,.64,1) ${i*70}ms both`:"none",
+                "--dr":(-8+(i%5)*4)+"deg",
+                animation:dealPhase?"dealIn 0.5s cubic-bezier(.34,1.4,.64,1) "+(i*70)+"ms both":"none",
                 flexShrink:0,
               }}>
                 <Card card={c}
@@ -684,7 +664,7 @@ function GameScreen({ numAI,aiPlayers,onGameOver,
         </div>
         <div style={{textAlign:"center",fontSize:8,color:"rgba(255,255,255,0.2)",
           letterSpacing:2,marginTop:4}}>
-          YOU · {playerHand.length} CARDS {isMyTurn&&playable.length>0?`· ${playable.length} PLAYABLE`:""}
+          YOU · {playerHand.length} CARDS {isMyTurn && playable.length > 0 ? "· " + playable.length + " PLAYABLE" : ""}
         </div>
       </div>
       {showColorPicker&&<ColorPicker onPick={pickColor}/>}
@@ -709,7 +689,6 @@ function LoadingScreen({ onDone }) {
       background:"linear-gradient(135deg,#07071a,#0f0c29,#07071a)",
       display:"flex",flexDirection:"column",alignItems:"center",
       justifyContent:"center",fontFamily:"'Orbitron',monospace"}}>
-      <style>{`@keyframes splashPulse{0%,100%{transform:scale(1)}50%{transform:scale(0.92)}}`}</style>
       <div style={{fontSize:68,marginBottom:14,
         filter:"drop-shadow(0 0 30px rgba(199,125,255,0.5))",
         animation:"splashPulse 1.2s ease-in-out infinite"}}>🃏</div>
@@ -719,7 +698,7 @@ function LoadingScreen({ onDone }) {
         CARD RUSH
       </h1>
       <div style={{width:220,height:6,borderRadius:100,background:"rgba(255,255,255,0.1)",overflow:"hidden"}}>
-        <div style={{height:"100%",borderRadius:100,width:`${pct}%`,
+        <div style={{height:"100%",borderRadius:100,width:pct+"%",
           background:"linear-gradient(90deg,#c77dff,#4facfe)",
           transition:"width 0.05s linear",boxShadow:"0 0 12px rgba(199,125,255,0.6)"}}/>
       </div>
@@ -739,7 +718,6 @@ function InfoModal({ onClose }) {
       display:"flex",alignItems:"center",justifyContent:"center",
       padding:20,fontFamily:"'Orbitron',monospace",
     }}>
-      <style>{`@keyframes modalSlideUp{from{opacity:0;transform:translateY(40px) scale(0.96)}to{opacity:1;transform:translateY(0) scale(1)}}`}</style>
       <div onClick={e=>e.stopPropagation()} style={{
         width:"100%",maxWidth:380,
         background:"linear-gradient(145deg,#0e0c24,#13112e)",
@@ -875,11 +853,6 @@ function HomeScreen({ stats, numAI, setNumAI, onPlay }) {
       justifyContent:"center",fontFamily:"'Orbitron',monospace",
       padding:24,position:"relative",overflow:"hidden",
     }}>
-      <style>{`
-        @keyframes floatCard{0%,100%{transform:translateY(0) rotate(var(--r))}50%{transform:translateY(-14px) rotate(var(--r))}}
-        @keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-        @keyframes iBtnPulse{0%,100%{box-shadow:0 0 0 0 rgba(199,125,255,0.5)}70%{box-shadow:0 0 0 10px rgba(199,125,255,0)}}
-      `}</style>
 
       {/* ⓘ info button — top left corner */}
       <button onClick={()=>setShowInfo(true)} style={{
@@ -904,10 +877,10 @@ function HomeScreen({ stats, numAI, setNumAI, onPlay }) {
       {[...Array(8)].map((_,i)=>(
         <div key={i} style={{
           position:"absolute",width:52,height:74,borderRadius:9,
-          background:`linear-gradient(135deg,${Object.values(THEME)[i%4].bg},${Object.values(THEME)[i%4].dark})`,
-          opacity:0.08,"--r":`${-25+i*12}deg`,
-          left:`${5+i*12}%`,top:`${5+Math.sin(i)*40}%`,
-          animation:`floatCard ${3+i*0.4}s ease-in-out infinite`,
+          background:"linear-gradient(135deg,"+Object.values(THEME)[i%4].bg+","+Object.values(THEME)[i%4].dark+")",
+          opacity:0.08,"--r":(-25+i*12)+"deg",
+          left:(5+i*12)+"%",top:(5+Math.sin(i)*40)+"%",
+          animation:"floatCard "+(3+i*0.4)+"s ease-in-out infinite",
           border:"2px solid rgba(255,255,255,0.1)",pointerEvents:"none",
         }}/>
       ))}
@@ -988,7 +961,7 @@ function HomeScreen({ stats, numAI, setNumAI, onPlay }) {
 function EndScreen({ winner, aiPlayers, stats, onPlayAgain, onHome }) {
   const win=winner==="player";
   const aiIdx=winner?.startsWith("ai")?parseInt(winner[2]):-1;
-  const winnerName=win?"YOU WIN!":`${aiPlayers[aiIdx]?.name||"AI"} WINS`;
+  const winnerName=win?"YOU WIN!":(aiPlayers[aiIdx]?.name||"AI")+" WINS";
 
   // Generate fountain cards (win) or wilting cards (lose) — 14 cards total
   const CARD_COLORS=["red","blue","green","yellow"];
@@ -1011,65 +984,22 @@ function EndScreen({ winner, aiPlayers, stats, onPlayAgain, onHome }) {
       justifyContent:"center",fontFamily:"'Orbitron',monospace",padding:24,
       position:"relative",overflow:"hidden"}}>
 
-      <style>{`
-        @keyframes fountainCard{
-          0%{opacity:0;transform:translate(-50%,-50%) translate(0,0) rotate(0deg) scale(0.3)}
-          15%{opacity:1}
-          60%{transform:translate(-50%,-50%) translate(var(--fx),var(--fy)) rotate(var(--fr)) scale(1.1)}
-          100%{opacity:0;transform:translate(-50%,-50%) translate(var(--fx),calc(var(--fy) + 60px)) rotate(calc(var(--fr) + 20deg)) scale(0.9)}
-        }
-        @keyframes wiltCard{
-          0%{opacity:0;transform:translate(-50%,-110%) translate(var(--wx),0) rotate(0deg) scale(0.5)}
-          20%{opacity:1;transform:translate(-50%,-110%) translate(var(--wx),0) rotate(0deg) scale(1)}
-          70%{opacity:0.7;transform:translate(-50%,-110%) translate(var(--wx),var(--wy)) rotate(var(--wr)) scale(0.95)}
-          100%{opacity:0;transform:translate(-50%,-110%) translate(var(--wx),calc(var(--wy) + 30px)) rotate(calc(var(--wr) * 1.4)) scale(0.7)}
-        }
-        @keyframes endTitleWin{
-          0%{opacity:0;transform:scale(0.4) rotate(-8deg)}
-          60%{transform:scale(1.08) rotate(2deg)}
-          80%{transform:scale(0.97) rotate(-1deg)}
-          100%{opacity:1;transform:scale(1) rotate(0deg)}
-        }
-        @keyframes endTitleLose{
-          0%{opacity:0;transform:translateY(-40px)}
-          60%{transform:translateY(6px)}
-          100%{opacity:1;transform:translateY(0)}
-        }
-        @keyframes trophyBounce{
-          0%{transform:scale(0) rotate(-20deg)}
-          50%{transform:scale(1.25) rotate(5deg)}
-          70%{transform:scale(0.9) rotate(-3deg)}
-          85%{transform:scale(1.07) rotate(1deg)}
-          100%{transform:scale(1) rotate(0deg)}
-        }
-        @keyframes skullDroop{
-          0%{transform:translateY(-30px);opacity:0}
-          40%{transform:translateY(10px);opacity:1}
-          60%{transform:translateY(-4px)}
-          100%{transform:translateY(0)}
-        }
-        @keyframes statsSlideIn{
-          from{opacity:0;transform:translateY(30px)}
-          to{opacity:1;transform:translateY(0)}
-        }
-      `}</style>
-
       {/* ── Cinematic cards ── */}
       {cinematicCards.map(c=>{
         const th=THEME[c.color];
         if(win){
           const rad=c.angle*(Math.PI/180);
-          const fx=`${Math.cos(rad)*c.dist}px`;
-          const fy=`${-Math.abs(Math.sin(rad)*c.dist)-60}px`;
+          const fx=(Math.cos(rad)*c.dist)+"px";
+          const fy=(-Math.abs(Math.sin(rad)*c.dist)-60)+"px";
           return(
             <div key={c.id} style={{
               position:"absolute",top:"38%",left:"50%",
               width:44,height:62,borderRadius:8,flexShrink:0,
-              background:`linear-gradient(145deg,${th.bg},${th.dark})`,
-              border:`2px solid ${th.glow}`,
-              boxShadow:`0 0 14px ${th.glow}80`,
-              "--fx":fx,"--fy":fy,"--fr":`${c.rot}deg`,
-              animation:`fountainCard 1.1s cubic-bezier(.22,.61,.36,1) ${c.delay}ms both`,
+              background:"linear-gradient(145deg,"+th.bg+","+th.dark,
+              border:"2px solid "+th.glow,
+              boxShadow:"0 0 14px "+th.glow+"80",
+              "--fx":fx,"--fy":fy,"--fr":c.rot+"deg",
+              animation:"fountainCard 1.1s cubic-bezier(.22,.61,.36,1) "+c.delay+"ms both",
               pointerEvents:"none",zIndex:0,
             }}/>
           );
@@ -1078,11 +1008,11 @@ function EndScreen({ winner, aiPlayers, stats, onPlayAgain, onHome }) {
             <div key={c.id} style={{
               position:"absolute",top:"32%",left:"50%",
               width:44,height:62,borderRadius:8,flexShrink:0,
-              background:`linear-gradient(145deg,${th.bg},${th.dark})`,
-              border:`2px solid rgba(255,255,255,0.1)`,
+              background:"linear-gradient(145deg,"+th.bg+","+th.dark,
+              border:"2px solid rgba(255,255,255,0.1)",
               opacity:0.7,
-              "--wx":`${c.xOff}px`,"--wy":`${c.yOff}px`,"--wr":`${c.rot}deg`,
-              animation:`wiltCard 1.4s cubic-bezier(.55,.06,.68,.19) ${c.delay}ms both`,
+              "--wx":c.xOff+"px","--wy":c.yOff+"px","--wr":c.rot+"deg",
+              animation:"wiltCard 1.4s cubic-bezier(.55,.06,.68,.19) "+c.delay+"ms both",
               pointerEvents:"none",zIndex:0,
             }}/>
           );
@@ -1180,20 +1110,6 @@ function LandingPage({ onPlayInBrowser, installPrompt, onInstall, isInstalled })
       overflowX:"hidden",
       position:"relative",
     }}>
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
-        @keyframes heroFloat{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-22px) rotate(-5deg)}}
-        @keyframes heroFloat2{0%,100%{transform:translateY(0) rotate(6deg)}50%{transform:translateY(-16px) rotate(9deg)}}
-        @keyframes heroFloat3{0%,100%{transform:translateY(0) rotate(-15deg)}50%{transform:translateY(-18px) rotate(-12deg)}}
-        @keyframes shimmer{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(32px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
-        @keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-        @keyframes installPop{0%{transform:scale(1)}30%{transform:scale(0.95)}60%{transform:scale(1.06)}100%{transform:scale(1)}}
-        .land-btn:hover{transform:scale(1.04)!important;filter:brightness(1.1)}
-        .land-btn:active{transform:scale(0.97)!important}
-        .feature-card:hover{transform:translateY(-4px)!important;border-color:rgba(199,125,255,0.4)!important}
-      `}</style>
 
       {/* ── animated bg cards ── */}
       <div style={{position:"fixed",inset:0,pointerEvents:"none",overflow:"hidden",zIndex:0}}>
@@ -1207,11 +1123,11 @@ function LandingPage({ onPlayInBrowser, installPrompt, onInstall, isInstalled })
         ].map((item,i)=>(
           <div key={i} style={{
             position:"absolute",width:60,height:86,borderRadius:10,
-            background:`linear-gradient(145deg,${THEME[item.c].bg},${THEME[item.c].dark})`,
+            background:"linear-gradient(145deg,"+THEME[item.c].bg+","+THEME[item.c].dark+")",
             border:"2px solid rgba(255,255,255,0.15)",
-            boxShadow:`0 0 30px ${THEME[item.c].glow}40`,
+            boxShadow:"0 0 30px "+THEME[item.c].glow+"40",
             left:item.l,top:item.t,
-            animation:`${item.anim} ${item.dur} ease-in-out infinite`,
+            animation:item.anim+" "+item.dur+" ease-in-out infinite",
             opacity:0.18,
           }}/>
         ))}
@@ -1370,9 +1286,9 @@ function LandingPage({ onPlayInBrowser, installPrompt, onInstall, isInstalled })
             ].map((c,i)=>(
               <div key={i} style={{
                 width:38,height:54,borderRadius:6,flexShrink:0,
-                background:`linear-gradient(145deg,${THEME[c.color].bg},${THEME[c.color].dark})`,
-                border: i===0?"3px solid #fff":i===1||i===2?`2px solid ${THEME[c.color].glow}`:"2px solid rgba(255,255,255,0.13)",
-                boxShadow: i===0?`0 0 16px ${THEME[c.color].glow},0 8px 20px rgba(0,0,0,0.6)`:"0 4px 10px rgba(0,0,0,0.5)",
+                background:"linear-gradient(145deg,"+THEME[c.color].bg+","+THEME[c.color].dark+")",
+                border: i===0?"3px solid #fff":i===1||i===2?"2px solid "+THEME[c.color].glow:"2px solid rgba(255,255,255,0.13)",
+                boxShadow: i===0?"0 0 16px "+THEME[c.color].glow+",0 8px 20px rgba(0,0,0,0.6)":"0 4px 10px rgba(0,0,0,0.5)",
                 display:"flex",alignItems:"center",justifyContent:"center",
                 transform:i===0?"translateY(-12px) scale(1.08)":i===1||i===2?"translateY(-4px)":"none",
                 transition:"all 0.2s",
@@ -1575,7 +1491,7 @@ export default function CardRush() {
     const dealt = dealGame(numAI);
     setPlayerHand(dealt.player);
     const h={};
-    for(let i=0;i<numAI;i++) h[`ai${i}`]=dealt.aiHands[`ai${i}`];
+    for(let i=0;i<numAI;i++) h["ai"+i]=dealt.aiHands["ai"+i];
     setAiHandsState(h);
     setDeckState(dealt.deck);
     setTopState(dealt.top);
