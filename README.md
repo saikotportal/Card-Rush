@@ -149,6 +149,8 @@ cardrush/
 
 ## 📄 License
 
+MIT --
+
 Copyright (c) 2026 Saikot Islam Abir
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
