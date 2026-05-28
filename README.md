@@ -4,7 +4,7 @@
 
 ![Card Rush](public/icon-128.png)
 
-**[▶ Play Now]( https://your-netlify-url.netlify.app](https://cardrushh.netlify.app )** <!-- replace with your Netlify URL -->
+**[▶ Play Now]( https://your-netlify-url.netlify.app](https://cardrushh.netlify.app ) <!-- replace with your Netlify URL -->
 
 ---
 
