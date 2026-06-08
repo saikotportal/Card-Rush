@@ -12,7 +12,7 @@
 
 - **UNO-style gameplay** — Number cards, Skip, Reverse, Draw 2, Wild, and Wild Draw 4
 - **3 AI opponents** with unique personalities:
-  - 🔥 **Blaze** — Aggressive. Plays power cards without mercy.
+  - 🔥 **Blaze** — Aggressive. Plays power cards without mercy. 
   - ❄️ **Chill** — Passive. Calm and steady.
   - 🎭 **Trix** — Trickster. Unpredictable chaos.
 - **1–3 AI opponents** — choose your difficulty by opponent count
